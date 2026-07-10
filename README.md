@@ -119,19 +119,39 @@ Stellar/Soroban does two things this tool genuinely needs and a plain web form c
 
 ## Repository Structure
 
-This repo (`lafiya-verifier`) is currently pre-alpha and intentionally minimal:
+This repo (`lafiya-verifier`) has split out of `lafiya-web` ahead of the org's usual build order because CHW registration and attestation needed dedicated infrastructure sooner than planned:
 
 ```
 lafiya-verifier/
 │
-└── README.md   ← This file
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── attestations/   ← POST: hash + submit an attestation, queue the payout
+│   │   │   ├── health/         ← GET: liveness check
+│   │   │   ├── payouts/        ← GET: the authenticated CHW's payout history
+│   │   │   └── records/        ← POST: create/update a patient's emergency profile
+│   │   ├── register/           ← CHW registration page
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/             ← PatientRecordForm, AttestationPanel, ui/ primitives
+│   ├── config/                 ← validated runtime env (src/config/env.ts)
+│   ├── lib/
+│   │   ├── auth/                ← bearer token + CHW session/allowlist guard
+│   │   ├── crypto/               ← canonical JSON + record hashing for attestation
+│   │   ├── http/                  ← shared error-to-HTTP-response mapping
+│   │   ├── payouts/                ← payout queueing business logic
+│   │   ├── stellar/                 ← Soroban RPC, keypair, attestation submission
+│   │   ├── supabase/                ← Supabase clients + per-table repositories
+│   │   └── validation/               ← zod schema for CHW-captured patient records
+│   └── types/                  ← shared domain types
+├── tests/unit/                 ← mirrors src/, one test file per module
+└── .github/workflows/ci.yml    ← format/lint/typecheck/test/build on every push
 ```
 
-Per the Lafiya organization's build order (see [Lafiya Organization](#lafiya-organization)), CHW verification begins as a route inside `lafiya-web` and is only split out into this dedicated repo once it grows enough to need its own infrastructure. Resist scaffolding this repo ahead of that point — two working repos (`lafiya-web`, `lafiya-contracts`) beat five half-built ones.
+See [Lafiya Organization](#lafiya-organization) for how this fits with `lafiya-web` and `lafiya-contracts`.
 
 ## Quick Start
-
-_Pre-alpha; instructions land once CHW verification splits out of `lafiya-web` (post-M1)._ Planned shape, matching the sibling repos:
 
 ```bash
 git clone https://github.com/lafiya-xyz/lafiya-verifier
@@ -141,18 +161,32 @@ npm install
 npm run dev
 ```
 
-Until then, CHW registration and attestation are exercised through `lafiya-web` directly — see that repo's README.
+The test suite (`npm test`) and typecheck/lint/format scripts don't need real
+credentials — only `npm run dev` and `npm run build` read `.env.local`.
 
 ## Tech Stack
 
-- **Frontend / app:** Next.js, deployed on Vercel (matching `lafiya-web`)
+- **Frontend / app:** Next.js 14 (App Router), deployed on Vercel (matching `lafiya-web`)
 - **Data & auth:** Supabase (Postgres, Row-Level Security, encryption at rest)
-- **On-chain:** Soroban smart contracts (Rust) on Stellar; USDC on Stellar for CHW payments
+- **On-chain:** Soroban smart contracts (Rust) on Stellar via `@stellar/stellar-sdk`; USDC on Stellar for CHW payments
+- **Validation:** zod, shared between the client form and the API routes
+- **Testing:** Vitest + Testing Library
 - **Standards:** W3C Verifiable Credentials data model; HL7 FHIR for health-data field structure
 
 ## Testing
 
-No automated tests yet — this repo has no code beyond this README. Test coverage is planned alongside the initial CHW registration/attestation implementation, once it splits out of `lafiya-web`.
+```bash
+npm test          # run once
+npm run test:watch
+npm run typecheck
+npm run lint
+npm run format:check
+```
+
+Tests mock the Supabase client and Soroban RPC server at the boundary (see
+`tests/helpers/mockSupabaseClient.ts`) rather than hitting real
+infrastructure — every repository, service, and API route handler takes its
+client/server as a parameter specifically so this works. See CONTRIBUTING.md.
 
 ## Roadmap
 
@@ -183,11 +217,11 @@ Lafiya is built as an open-source **Digital Public Good** (SDG 3, Good Health an
 
 ## License
 
-Recommended: **Apache-2.0** (OSI-approved, includes a patent grant — required for Digital Public Good status).
+**Apache-2.0** (OSI-approved, includes a patent grant — required for Digital Public Good status). See [LICENSE](./LICENSE).
 
 ## Contributing
 
-Issues and PRs welcome once this repo's M0/M1 work lands. Contributors agree to the project's code of conduct and license terms.
+Issues and PRs welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for local setup, the checks CI runs, and this repo's conventions (dependency injection for testability, thin route handlers, no health data on-chain). Contributors agree to the project's code of conduct and license terms.
 
 ## Lafiya Organization
 
@@ -204,7 +238,7 @@ This project lives under the `lafiya-xyz` GitHub organization. If a change here 
 ### Conventions for AI Agents
 
 - Treat the shared repo table above as the source of truth for **cross-repo** priority and scope. Each repo's own README covers repo-local conventions.
-- Do not scaffold this repo ahead of need — per the priority column, `lafiya-web` and `lafiya-contracts` come first.
+- This repo has already split out of `lafiya-web` (see Repository Structure) — the priority column above reflects the org's original sequencing, not this repo's current status.
 - Keep the attestation record shape (hash, attester identity, timestamp) identical across `lafiya-verifier`, `lafiya-contracts` (Rust), and `lafiya-web` (TypeScript) once each exists — translation-layer drift is a common source of bugs.
 
 ## Disclaimer
