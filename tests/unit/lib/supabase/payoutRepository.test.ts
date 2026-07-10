@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { queuePayoutRecord } from "@/lib/supabase/payoutRepository";
+import { listPayoutsForChw, queuePayoutRecord } from "@/lib/supabase/payoutRepository";
 import { createMockSupabaseClient } from "../../../helpers/mockSupabaseClient";
 
 const row = {
@@ -43,5 +43,28 @@ describe("queuePayoutRecord", () => {
         amountUsdc: 2,
       }),
     ).rejects.toThrow(/insert failed/);
+  });
+});
+
+describe("listPayoutsForChw", () => {
+  it("maps each row to a PayoutRecord, most recent first", async () => {
+    const secondRow = { ...row, id: "payout_2", created_at: "2026-07-09T00:00:00.000Z" };
+    const { client, from } = createMockSupabaseClient({ data: [row, secondRow], error: null });
+
+    const result = await listPayoutsForChw(client, "chw_1");
+
+    expect(from).toHaveBeenCalledWith("payout_records");
+    expect(result).toHaveLength(2);
+    expect(result[0]?.id).toBe("payout_1");
+    expect(result[1]?.id).toBe("payout_2");
+  });
+
+  it("throws a readable error when Supabase returns an error", async () => {
+    const { client } = createMockSupabaseClient({
+      data: null,
+      error: { message: "query failed" },
+    });
+
+    await expect(listPayoutsForChw(client, "chw_1")).rejects.toThrow(/query failed/);
   });
 });

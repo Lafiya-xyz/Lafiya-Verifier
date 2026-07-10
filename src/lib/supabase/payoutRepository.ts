@@ -51,3 +51,21 @@ export async function queuePayoutRecord(
 
   return rowToPayoutRecord(data as PayoutRow);
 }
+
+/** Lists a CHW's payout records, most recent first. */
+export async function listPayoutsForChw(
+  client: SupabaseClient,
+  chwId: string,
+): Promise<PayoutRecord[]> {
+  const { data, error } = await client
+    .from(TABLE)
+    .select()
+    .eq("chw_id", chwId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(`Failed to list payouts for CHW ${chwId}: ${error.message}`);
+  }
+
+  return (data as PayoutRow[]).map(rowToPayoutRecord);
+}
