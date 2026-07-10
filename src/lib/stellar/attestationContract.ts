@@ -1,4 +1,11 @@
-import { BASE_FEE, Contract, type Keypair, TransactionBuilder, nativeToScVal } from "@stellar/stellar-sdk";
+import {
+  BASE_FEE,
+  Contract,
+  type Keypair,
+  type rpc,
+  TransactionBuilder,
+  nativeToScVal,
+} from "@stellar/stellar-sdk";
 import { getEnv } from "@/config/env";
 import type { Attestation } from "@/types";
 import { getNetworkPassphrase, getSorobanServer } from "./network";
@@ -12,20 +19,30 @@ export interface SubmitAttestationParams {
   attesterPublicKey: string;
 }
 
+export interface SubmitAttestationDeps {
+  server?: rpc.Server;
+  contractId?: string;
+  networkPassphrase?: string;
+}
+
 /**
  * Builds, signs, and submits the `submit_attestation` invocation against the
  * Soroban attestation registry, then waits for it to confirm. The contract
  * enforces the attester allowlist on-chain; callers should still run
  * `isChwAllowlisted` first to fail fast with a clear error before spending
  * a transaction fee on a submission the contract will reject anyway.
+ *
+ * `deps` lets tests inject a fake RPC server instead of the real network.
  */
 export async function submitAttestation(
   params: SubmitAttestationParams,
   signer: Keypair,
+  deps: SubmitAttestationDeps = {},
 ): Promise<Attestation> {
-  const env = getEnv();
-  const server = getSorobanServer();
-  const contract = new Contract(env.ATTESTATION_CONTRACT_ID);
+  const server = deps.server ?? getSorobanServer();
+  const contractId = deps.contractId ?? getEnv().ATTESTATION_CONTRACT_ID;
+  const networkPassphrase = deps.networkPassphrase ?? getNetworkPassphrase();
+  const contract = new Contract(contractId);
 
   const sourceAccount = await server.getAccount(signer.publicKey());
 
@@ -38,7 +55,7 @@ export async function submitAttestation(
 
   const builtTransaction = new TransactionBuilder(sourceAccount, {
     fee: BASE_FEE,
-    networkPassphrase: getNetworkPassphrase(),
+    networkPassphrase,
   })
     .addOperation(operation)
     .setTimeout(30)
