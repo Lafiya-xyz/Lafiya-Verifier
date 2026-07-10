@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-lafiya-teal: #0f766e;
+  --color-lafiya-amber: #d97706;
+}
+
+body {
+  color-scheme: light dark;
+}
