@@ -11,7 +11,15 @@ export function createMockSupabaseClient(result: { data: unknown; error: { messa
   const builder: Record<string, ReturnType<typeof vi.fn>> = {};
   const chain = new Proxy(builder, {
     get(target, prop: string) {
-      if (prop === "then") return undefined;
+      // Lets list queries (`.select().eq().order()`, no `.single()`) be
+      // awaited directly, since Supabase's real query builder is itself
+      // thenable.
+      if (prop === "then") {
+        return (
+          onFulfilled: (value: typeof result) => unknown,
+          onRejected?: (reason: unknown) => unknown,
+        ) => Promise.resolve(result).then(onFulfilled, onRejected);
+      }
       if (!target[prop]) {
         target[prop] = vi.fn(() => chain);
       }
