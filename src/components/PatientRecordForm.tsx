@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { AttestationPanel } from "./AttestationPanel";
 import { Button } from "./ui/Button";
 import { TextField } from "./ui/TextField";
 import { Select } from "./ui/Select";
@@ -224,9 +225,7 @@ export function PatientRecordForm() {
       </Button>
 
       {result.status === "success" ? (
-        <p role="status" className="text-sm font-medium text-lafiya-teal">
-          Record saved (id: {result.recordId}). Ready for attestation.
-        </p>
+        <AttestationPanel recordId={result.recordId} accessToken={form.accessToken} />
       ) : null}
       {result.status === "error" ? (
         <p role="alert" className="text-sm font-medium text-red-600 dark:text-red-400">

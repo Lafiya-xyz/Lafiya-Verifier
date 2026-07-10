@@ -42,7 +42,8 @@ describe("PatientRecordForm", () => {
     fillRequiredFields();
     fireEvent.click(screen.getByRole("button", { name: /save patient record/i }));
 
-    expect(await screen.findByRole("status")).toHaveTextContent("rec_123");
+    expect(await screen.findByRole("button", { name: /attest on-chain/i })).toBeInTheDocument();
+    expect(screen.getByText(/rec_123/)).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/records",
       expect.objectContaining({ method: "POST" }),
