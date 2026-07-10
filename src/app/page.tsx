@@ -11,9 +11,8 @@ export default function HomePage() {
           Verify a patient record in the field
         </h1>
         <p className="mt-4 text-slate-600 dark:text-slate-400">
-          Register a patient&apos;s emergency profile and attest it on-chain
-          so a responder can trust it — without exposing the underlying
-          health data.
+          Register a patient&apos;s emergency profile and attest it on-chain so a responder can
+          trust it — without exposing the underlying health data.
         </p>
       </div>
       <Link

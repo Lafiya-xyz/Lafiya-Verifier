@@ -44,7 +44,11 @@ describe("requireAuthenticatedChw", () => {
 
   it("throws UnauthorizedError when the token is invalid", async () => {
     const client = {
-      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: { message: "bad token" } }) },
+      auth: {
+        getUser: vi
+          .fn()
+          .mockResolvedValue({ data: { user: null }, error: { message: "bad token" } }),
+      },
     } as unknown as SupabaseClient;
 
     await expect(requireAuthenticatedChw(client, "bad-token")).rejects.toThrow(UnauthorizedError);
@@ -53,7 +57,9 @@ describe("requireAuthenticatedChw", () => {
   it("throws UnauthorizedError when the user has no linked Stellar key", async () => {
     const client = {
       auth: {
-        getUser: vi.fn().mockResolvedValue({ data: { user: { id: "u1", user_metadata: {} } }, error: null }),
+        getUser: vi
+          .fn()
+          .mockResolvedValue({ data: { user: { id: "u1", user_metadata: {} } }, error: null }),
       },
     } as unknown as SupabaseClient;
 

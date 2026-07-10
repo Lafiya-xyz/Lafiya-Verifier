@@ -7,11 +7,7 @@ export const metadata: Metadata = {
     "CHW registration and Soroban attestation tool for the Lafiya emergency health card.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>{children}</body>

@@ -46,7 +46,9 @@ function chainResolving(result: { data: unknown; error: unknown }) {
 function buildClient(userMetadata: Record<string, unknown> | null) {
   const chwChain = chainResolving({ data: chwRow, error: null });
   const recordChain = chainResolving({ data: recordRow, error: null });
-  const from = vi.fn((table: string) => (table === "community_health_workers" ? chwChain : recordChain));
+  const from = vi.fn((table: string) =>
+    table === "community_health_workers" ? chwChain : recordChain,
+  );
 
   return {
     auth: {
@@ -70,7 +72,10 @@ function jsonRequest(body: unknown, token = "valid-token"): Request {
 describe("handleCreateOrUpdateRecord", () => {
   it("returns 401 when no bearer token is present", async () => {
     const request = new Request("https://example.com/api/records", { method: "POST" });
-    const response = await handleCreateOrUpdateRecord(request, buildClient({ stellar_public_key: "GABC123" }));
+    const response = await handleCreateOrUpdateRecord(
+      request,
+      buildClient({ stellar_public_key: "GABC123" }),
+    );
     expect(response.status).toBe(401);
   });
 

@@ -66,9 +66,7 @@ export async function submitAttestation(
 
   const sendResult = await server.sendTransaction(preparedTransaction);
   if (sendResult.status === "ERROR") {
-    throw new Error(
-      `Soroban rejected the attestation transaction for record ${params.recordId}`,
-    );
+    throw new Error(`Soroban rejected the attestation transaction for record ${params.recordId}`);
   }
 
   await pollTransactionUntilComplete(server, sendResult.hash);

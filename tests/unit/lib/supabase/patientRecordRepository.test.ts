@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  getPatientRecordById,
-  upsertPatientRecord,
-} from "@/lib/supabase/patientRecordRepository";
+import { getPatientRecordById, upsertPatientRecord } from "@/lib/supabase/patientRecordRepository";
 import { createMockSupabaseClient } from "../../../helpers/mockSupabaseClient";
 import type { PatientRecordInput } from "@/lib/validation/patientRecord";
 

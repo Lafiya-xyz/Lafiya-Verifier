@@ -9,9 +9,7 @@ describe("submitAttestation", () => {
 
     const getAccount = vi.fn().mockResolvedValue(sourceAccount);
     const prepareTransaction = vi.fn().mockImplementation(async (tx) => tx);
-    const sendTransaction = vi
-      .fn()
-      .mockResolvedValue({ status: "PENDING", hash: "tx-hash-123" });
+    const sendTransaction = vi.fn().mockResolvedValue({ status: "PENDING", hash: "tx-hash-123" });
     const getTransaction = vi
       .fn()
       .mockResolvedValue({ status: rpc.Api.GetTransactionStatus.SUCCESS });

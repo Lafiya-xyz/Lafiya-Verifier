@@ -7,7 +7,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  * enough for repository unit tests that only assert on the mapped output
  * and on which table/filters were used, without a real database.
  */
-export function createMockSupabaseClient(result: { data: unknown; error: { message: string } | null }) {
+export function createMockSupabaseClient(result: {
+  data: unknown;
+  error: { message: string } | null;
+}) {
   const builder: Record<string, ReturnType<typeof vi.fn>> = {};
   const chain = new Proxy(builder, {
     get(target, prop: string) {

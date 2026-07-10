@@ -52,8 +52,8 @@ export function AttestationPanel({ recordId, accessToken }: AttestationPanelProp
   return (
     <div className="flex flex-col gap-3 rounded-md border border-slate-200 p-4 dark:border-slate-700">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Record <span className="font-mono">{recordId}</span> is saved. Submit an attestation to
-        put a hash of it on-chain and queue your USDC payout.
+        Record <span className="font-mono">{recordId}</span> is saved. Submit an attestation to put
+        a hash of it on-chain and queue your USDC payout.
       </p>
       <Button
         type="button"

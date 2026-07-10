@@ -10,7 +10,10 @@ import { listPayoutsForChw } from "@/lib/supabase/payoutRepository";
  * comes from their verified session, never from a query param — a CHW can
  * only ever see their own payouts.
  */
-export async function handleListPayouts(request: Request, client: SupabaseClient): Promise<Response> {
+export async function handleListPayouts(
+  request: Request,
+  client: SupabaseClient,
+): Promise<Response> {
   const token = extractBearerToken(request);
   if (!token) {
     return NextResponse.json({ error: "Missing bearer token" }, { status: 401 });

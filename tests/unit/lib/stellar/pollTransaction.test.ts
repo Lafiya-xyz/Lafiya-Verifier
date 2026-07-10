@@ -10,11 +10,9 @@ describe("pollTransactionUntilComplete", () => {
       .mockResolvedValueOnce({ status: rpc.Api.GetTransactionStatus.NOT_FOUND })
       .mockResolvedValueOnce({ status: rpc.Api.GetTransactionStatus.SUCCESS, latestLedger: 5 });
 
-    const result = await pollTransactionUntilComplete(
-      { getTransaction },
-      "deadbeef",
-      { intervalMs: 1 },
-    );
+    const result = await pollTransactionUntilComplete({ getTransaction }, "deadbeef", {
+      intervalMs: 1,
+    });
 
     expect(result.status).toBe(rpc.Api.GetTransactionStatus.SUCCESS);
     expect(getTransaction).toHaveBeenCalledTimes(3);
@@ -36,11 +34,7 @@ describe("pollTransactionUntilComplete", () => {
       .mockResolvedValue({ status: rpc.Api.GetTransactionStatus.NOT_FOUND });
 
     await expect(
-      pollTransactionUntilComplete(
-        { getTransaction },
-        "deadbeef",
-        { intervalMs: 1, timeoutMs: 5 },
-      ),
+      pollTransactionUntilComplete({ getTransaction }, "deadbeef", { intervalMs: 1, timeoutMs: 5 }),
     ).rejects.toThrow(/Timed out/);
   });
 });

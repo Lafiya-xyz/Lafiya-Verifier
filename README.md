@@ -2,7 +2,7 @@
 
 [![Built on Stellar](https://img.shields.io/badge/Built%20on-Stellar-blue?logo=stellar)](https://stellar.org)
 [![Soroban Smart Contracts](https://img.shields.io/badge/Smart%20Contracts-Soroban-purple)](https://soroban.stellar.org)
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange)]()
+[![Status](https://img.shields.io/badge/status-pre--alpha-orange)](<>)
 
 The community health worker (CHW) verification tool for **Lafiya** — a free, patient-owned emergency health card. This repo will hold the dedicated CHW registration and attestation flow once it outgrows living inside `lafiya-web`.
 
@@ -131,7 +131,7 @@ Per the Lafiya organization's build order (see [Lafiya Organization](#lafiya-org
 
 ## Quick Start
 
-*Pre-alpha; instructions land once CHW verification splits out of `lafiya-web` (post-M1).* Planned shape, matching the sibling repos:
+_Pre-alpha; instructions land once CHW verification splits out of `lafiya-web` (post-M1)._ Planned shape, matching the sibling repos:
 
 ```bash
 git clone https://github.com/lafiya-xyz/lafiya-verifier
@@ -156,9 +156,9 @@ No automated tests yet — this repo has no code beyond this README. Test covera
 
 ## Roadmap
 
-- **M0 — Public card (testnet).** One patient can create a profile and expose a working read-only emergency page via QR. *(owned by `lafiya-web`)*
-- **M1 — Attestation.** Soroban registry lets an allowlisted attester verify a record; the card shows a verified indicator. *(this repo's core scope, currently inside `lafiya-web`)*
-- **M2 — Incentives.** USDC-on-Stellar payout to a CHW per verified registration. *(this repo's core scope)*
+- **M0 — Public card (testnet).** One patient can create a profile and expose a working read-only emergency page via QR. _(owned by `lafiya-web`)_
+- **M1 — Attestation.** Soroban registry lets an allowlisted attester verify a record; the card shows a verified indicator. _(this repo's core scope, currently inside `lafiya-web`)_
+- **M2 — Incentives.** USDC-on-Stellar payout to a CHW per verified registration. _(this repo's core scope)_
 - **M3 — Pilot.** Small supervised field pilot; measure verified cards created and scan events.
 - **M4 — Mainnet + funding.** Launch on mainnet; open transparent funding pool.
 
@@ -193,13 +193,13 @@ Issues and PRs welcome once this repo's M0/M1 work lands. Contributors agree to 
 
 This project lives under the `lafiya-xyz` GitHub organization. If a change here touches a shared contract (the attestation schema, the Soroban interface, the emergency-record shape), call it out so the matching repo can be updated.
 
-| Repo | Purpose | Priority |
-|------|---------|----------|
-| `lafiya-web` | Patient + responder web app (Next.js). Public emergency page, authed profile editor, QR generation. | **Build first** |
-| `lafiya-contracts` | Soroban smart contracts (Rust): attestation registry + attester allowlist. Testnet first. | **Build next** |
-| `lafiya-docs` | Concept note, data model, threat model, privacy design, funding/DPG materials, references. | Start now (lightweight) |
-| `.github` | Organization profile README and contribution guidelines. | Start now |
-| **`lafiya-verifier`** *(this repo)* | CHW verification tool. Begins as a route inside `lafiya-web`; split out only if it grows. | Later |
+| Repo                                | Purpose                                                                                             | Priority                |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------- |
+| `lafiya-web`                        | Patient + responder web app (Next.js). Public emergency page, authed profile editor, QR generation. | **Build first**         |
+| `lafiya-contracts`                  | Soroban smart contracts (Rust): attestation registry + attester allowlist. Testnet first.           | **Build next**          |
+| `lafiya-docs`                       | Concept note, data model, threat model, privacy design, funding/DPG materials, references.          | Start now (lightweight) |
+| `.github`                           | Organization profile README and contribution guidelines.                                            | Start now               |
+| **`lafiya-verifier`** _(this repo)_ | CHW verification tool. Begins as a route inside `lafiya-web`; split out only if it grows.           | Later                   |
 
 ### Conventions for AI Agents
 
@@ -219,11 +219,11 @@ These works directly informed Lafiya's design and are the intended reading for c
 
 **Books**
 
-- Shortliffe, E. H., & Cimino, J. J. (Eds.). (2021). *Biomedical Informatics: Computer Applications in Health Care and Biomedicine* (5th ed.). Springer. — Grounds the clinical data model: which fields are decision-relevant in an emergency, and how health records are structured and coded.
-- Preukschat, A., & Reed, D. (2021). *Self-Sovereign Identity: Decentralized Digital Identity and Verifiable Credentials*. Manning. — The blueprint for this repo: issuer/holder/verifier roles, verifiable credentials, hash-based attestation, key management, and offline verification.
-- Toyama, K. (2015). *Geek Heresy: Rescuing Social Change from the Cult of Technology*. PublicAffairs. — Keeps the project honest: technology amplifies human capacity rather than replacing it, which is why Lafiya centers community health workers, not the app.
-- Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly. — Informs the off-chain data layer: reliable and secure storage, encryption, and the boundary between what lives in the database and what is anchored on-chain.
-- Martin, R. C. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. Prentice Hall. — Discipline for an AI-assisted codebase: clear boundaries so the app, the contracts, and the data layer stay independently maintainable.
+- Shortliffe, E. H., & Cimino, J. J. (Eds.). (2021). _Biomedical Informatics: Computer Applications in Health Care and Biomedicine_ (5th ed.). Springer. — Grounds the clinical data model: which fields are decision-relevant in an emergency, and how health records are structured and coded.
+- Preukschat, A., & Reed, D. (2021). _Self-Sovereign Identity: Decentralized Digital Identity and Verifiable Credentials_. Manning. — The blueprint for this repo: issuer/holder/verifier roles, verifiable credentials, hash-based attestation, key management, and offline verification.
+- Toyama, K. (2015). _Geek Heresy: Rescuing Social Change from the Cult of Technology_. PublicAffairs. — Keeps the project honest: technology amplifies human capacity rather than replacing it, which is why Lafiya centers community health workers, not the app.
+- Kleppmann, M. (2017). _Designing Data-Intensive Applications_. O'Reilly. — Informs the off-chain data layer: reliable and secure storage, encryption, and the boundary between what lives in the database and what is anchored on-chain.
+- Martin, R. C. (2017). _Clean Architecture: A Craftsman's Guide to Software Structure and Design_. Prentice Hall. — Discipline for an AI-assisted codebase: clear boundaries so the app, the contracts, and the data layer stay independently maintainable.
 
 **Standards & documentation**
 
@@ -239,6 +239,6 @@ These works directly informed Lafiya's design and are the intended reading for c
 
 **Lafiya Verifier** — the proof behind the card.
 
-*Built for the Stellar ecosystem. Open source. Community owned.*
+_Built for the Stellar ecosystem. Open source. Community owned._
 
 </div>

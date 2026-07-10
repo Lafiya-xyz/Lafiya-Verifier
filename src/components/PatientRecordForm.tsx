@@ -118,7 +118,10 @@ export function PatientRecordForm() {
 
       setResult({ status: "success", recordId: body.record.id });
     } catch {
-      setResult({ status: "error", message: "Network error — check your connection and try again" });
+      setResult({
+        status: "error",
+        message: "Network error — check your connection and try again",
+      });
     } finally {
       setSubmitting(false);
     }
