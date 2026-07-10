@@ -73,19 +73,17 @@ function buildClient(recordExists = true) {
 
   return {
     auth: {
-      getUser: vi
-        .fn()
-        .mockResolvedValue({
-          data: {
-            user: {
-              id: "u1",
-              user_metadata: {
-                stellar_public_key: "GD6W4JI4OSSRPA2EVAVBMOBB5BJAP5U2OOI7OGKYKOB7MIVPRKLE5Z3A",
-              },
+      getUser: vi.fn().mockResolvedValue({
+        data: {
+          user: {
+            id: "u1",
+            user_metadata: {
+              stellar_public_key: "GD6W4JI4OSSRPA2EVAVBMOBB5BJAP5U2OOI7OGKYKOB7MIVPRKLE5Z3A",
             },
           },
-          error: null,
-        }),
+        },
+        error: null,
+      }),
     },
     from,
   } as unknown as SupabaseClient;
